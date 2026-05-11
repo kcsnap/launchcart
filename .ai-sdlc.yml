@@ -1,0 +1,80 @@
+# AI SDLC configuration for LaunchCart
+# This file tells the AI SDLC platform about this repository's structure,
+# stack, and risk areas so agents can produce accurate analysis.
+
+repo:
+  name: launchcart
+  description: E-commerce starter app — product catalogue with purchase enquiry flow
+  owner: kcsnap
+  platform_repo: kcsnap/ai-sdlc-platform
+
+stack:
+  frontend:
+    framework: React
+    language: TypeScript
+    bundler: Vite
+    router: React Router
+    location: src/frontend
+    entry: src/frontend/src/main.tsx
+    pages:
+      - path: /
+        component: HomePage
+        description: Landing page with featured products
+      - path: /products
+        component: ProductsPage
+        description: Full product catalogue
+      - path: /products/:slug
+        component: ProductDetailPage
+        description: Product detail with enquiry CTA
+      - path: /admin/products
+        component: AdminProductsPage
+        description: Admin product management
+      - path: /admin/enquiries
+        component: AdminEnquiriesPage
+        description: Admin enquiry management
+
+  api:
+    framework: ASP.NET Core
+    language: C#
+    version: net8.0
+    location: src/api
+    endpoints:
+      - GET  /api/products          # product catalogue
+      - GET  /api/products/:slug    # product detail
+      - POST /api/enquiries         # submit enquiry
+      - GET  /api/admin/products    # admin product list
+      - POST /api/admin/products    # create product
+      - PATCH /api/admin/products/:id/deactivate
+      - GET  /api/admin/enquiries   # admin enquiry list
+      - PATCH /api/admin/enquiries/:id/status
+
+  database:
+    engine: PostgreSQL
+    orm: Entity Framework Core
+    migrations: src/api/Data/Migrations
+    tables:
+      - Products
+      - Enquiries
+
+  infrastructure:
+    terraform: infra/terraform
+    ci: .github/workflows/ci.yml
+
+tests:
+  api: tests/api
+  frontend: src/frontend (Vitest — not yet added)
+
+risk_areas:
+  high:
+    - src/api/Data/Migrations     # database schema changes
+    - infra/terraform             # infrastructure changes
+    - .github/workflows           # CI/CD pipeline changes
+  medium:
+    - src/api/Endpoints           # API contract changes
+    - src/api/Domain              # domain model changes
+  low:
+    - src/frontend/src/pages      # UI-only changes
+    - src/frontend/src/components # component changes
+    - docs                        # documentation only
+
+branch_naming: ai/{issue-number}-{brief-description}

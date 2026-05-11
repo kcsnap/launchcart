@@ -1,0 +1,6 @@
+@LaunchCart.Api_HostAddress = http://localhost:5185
+
+GET {{LaunchCart.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
