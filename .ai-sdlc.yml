@@ -78,3 +78,7 @@ risk_areas:
     - docs                        # documentation only
 
 branch_naming: ai/{issue-number}-{brief-description}
+
+automation:
+  allow_low_risk_auto_merge: true
+  allow_low_risk_production_deploy: false
